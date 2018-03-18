@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Simple persistent cookie example</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            line-height: 1.6;
+            margin: auto auto 75px auto;
+            max-width: 40em;
+            padding: 1em;
+        }
+
+        pre {
+            background-color: #eee;
+            border: 1px solid #ccc;
+            padding: 1em;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+
+        code {
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+
+        footer {
+            font-style: italic;
+            margin-top: 10em;
+        }
+
+        .host-banner {
+            background-color: #777;
+            bottom: 0;
+            height: 50px;
+            left: 0;
+            position: fixed;
+            width: 100%;
+        }
+
+        .host-banner[data-host="blue"] {
+            background-color: blue;
+        }
+
+        .host-banner[data-host="green"] {
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+<h1><a href="/">Cookies Rocks!</a></h1>
+<h2>Simple persistent cookie example</h2>
+<p>
+    This page was sent from the server to your browser with a cookie.
+    This was done by adding this HTTP response header:
+</p>
+<pre>Set-Cookie: simple-persistent=hello; Max-Age: 3600</pre>
+<p>
+    This is a simple persistent cookie example:
+</p>
+<ul>
+    <li>a name: <code>simple-persistent</code></li>
+    <li>and a value: <code>hello</code>.</li>
+    <li>an expiration with a <code>Max-Age</code> value of: <code>3600</code> seconds.</li>
+</ul>
+<footer>
+    A project by <a href="https://twitter.com/hsablonniere" target="_blank">@hsablonniere</a>.
+    Sources on <a href="https://github.com/hsablonniere/cookies.rocks" target="_blank">Github</a>.
+</footer>
+<div class="host-banner" data-host="<%= host %>"></div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tracking image example</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            line-height: 1.6;
+            margin: auto auto 75px auto;
+            max-width: 40em;
+            padding: 1em;
+        }
+
+        pre {
+            background-color: #eee;
+            border: 1px solid #ccc;
+            padding: 1em;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 0.2em 0.5em;
+        }
+
+        td {
+            font-family: monospace;
+        }
+
+        footer {
+            font-style: italic;
+            margin-top: 10em;
+        }
+
+        .host-banner {
+            background-color: #777;
+            bottom: 0;
+            height: 50px;
+            left: 0;
+            position: fixed;
+            width: 100%;
+        }
+
+        .host-banner[data-host="blue"] {
+            background-color: blue;
+        }
+
+        .host-banner[data-host="green"] {
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+<h1><a href="/">Cookies Rocks!</a></h1>
+<h2>Tracking image example</h2>
+<p>
+    This image was sent from the server to your browser with a cookie containing a UUID.
+    If the request to the image already contained a UUID, it's reused as is.
+    If not, a new random one is generated.
+</p>
+<img src="/cookie.svg" alt="cookie" width="120px">
+<p>
+    By putting this image's URL on several pages of different websites,
+    it is possible to log each visited pages for a given visitor.
+</p>
+<pre>&lt;img src=&quot;//cookies.rocks/cookie.svg&quot;&gt;</pre>
+<p>
+    Here is a list of the pages you visited that use this tracking image:
+</p>
+<table>
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Page URL</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% sites.forEach(({ date, referer }) => { %>
+    <tr>
+        <td><%= date %></td>
+        <td><%= referer || 'Unknown' %></td>
+    </tr>
+    <% }) %>
+    </tbody>
+</table>
+<footer>
+    A project by <a href="https://twitter.com/hsablonniere" target="_blank">@hsablonniere</a>.
+    Sources on <a href="https://github.com/hsablonniere/cookies.rocks" target="_blank">Github</a>.
+</footer>
+<div class="host-banner" data-host="<%= host %>"></div>
+</body>
+</html>

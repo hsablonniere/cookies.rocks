@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Your profile</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            line-height: 1.6;
+            margin: auto auto 75px auto;
+            max-width: 40em;
+            padding: 1em;
+        }
+
+        pre {
+            background-color: #eee;
+            border: 1px solid #ccc;
+            padding: 1em;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+
+        code {
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+
+        label, input {
+            display: block;
+            margin: 1em 0;
+        }
+
+        footer {
+            font-style: italic;
+            margin-top: 10em;
+        }
+
+        .host-banner {
+            background-color: #777;
+            bottom: 0;
+            height: 50px;
+            left: 0;
+            position: fixed;
+            width: 100%;
+        }
+
+        .host-banner[data-host="blue"] {
+            background-color: blue;
+        }
+
+        .host-banner[data-host="green"] {
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+<h1><a href="/">Cookies Rocks!</a></h1>
+<h2>Your profile</h2>
+<% if (profile) { %>
+<ul>
+    <li>firstname: <%= profile.firstname %></li>
+    <li>lastname: <%- profile.lastname %></li>
+</ul>
+<% } else { %>
+<p>You don't have a profile yet</p>
+<% } %>
+<h3>Update with GET</h3>
+<form action="/update-profile.html" method="GET">
+    <label>Firstname: <input type="text" name="firstname"></label>
+    <label>Lastname: <textarea name="lastname"></textarea></label>
+    <input type="submit" value="Update profile">
+</form>
+<h3>Update with POST</h3>
+<form action="/update-profile.html" method="POST">
+    <label>Firstname: <input type="text" name="firstname"></label>
+    <label>Lastname: <input type="text" name="lastname"></label>
+    <input type="submit" value="Update profile">
+</form>
+<h2>CSRF "attack"</h2>
+<h3>CSRF with form GET</h3>
+<p>Use this on another site:</p>
+<pre>
+&lt;img src="//cookies.rocks/update-profile.html?firstname=fake&lastname=fake">
+</pre>
+<h3>CSRF with form POST</h3>
+<p>Use this on another site:</p>
+<pre>
+&lt;form action="//cookies.rocks/update-profile.html"
+      method="POST">
+    &lt;input type="hidden" name="firstname" value="fake">
+    &lt;input type="hidden" name="lastname" value="fake">
+    &lt;input type="submit" value="The button">
+&lt;/form>
+</pre>
+<footer>
+    A project by <a href="https://twitter.com/hsablonniere" target="_blank">@hsablonniere</a>.
+    Sources on <a href="https://github.com/hsablonniere/cookies.rocks" target="_blank">Github</a>.
+</footer>
+<div class="host-banner" data-host="<%= host %>"></div>
+</body>
+</html>
