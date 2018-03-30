@@ -142,7 +142,7 @@ app.use((req, res, next) => {
       if (referer.endsWith('/tracking-image-etag.html')) {
         res.set('Set-Cookie', `etag-uuid=${uuid}`);
       } else {
-        etagCache[uuid].push({ date: new Date().getTime(), referer, userAgent });
+        etagCache[uuid].sites.push({ date: new Date().getTime(), referer, userAgent });
       }
     }
 
