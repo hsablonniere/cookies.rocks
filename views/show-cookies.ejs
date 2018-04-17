@@ -13,7 +13,7 @@
             line-height: 1.6;
             margin: auto auto 75px auto;
             max-width: 40em;
-            padding: 1em;
+            padding: 0 0 0 2em;
         }
 
         pre {
@@ -39,6 +39,10 @@
             font-family: monospace;
         }
 
+        .path-nav {
+            margin-top: 1em;
+        }
+
         footer {
             font-style: italic;
             margin-top: 10em;
@@ -47,10 +51,10 @@
         .host-banner {
             background-color: #777;
             bottom: 0;
-            height: 50px;
             left: 0;
             position: fixed;
-            width: 100%;
+            top: 0;
+            width: 2em;
         }
 
         .host-banner[data-host="blue"] {
@@ -65,16 +69,7 @@
 <body>
 <h1><a href="/">Cookies Rocks!</a></h1>
 <h2>Show received cookies</h2>
-<div>
-    <a href="/show-cookies.html">/</a> -
-    <a href="/foo/show-cookies.html">/foo</a> -
-    <a href="/bar/show-cookies.html">/bar</a> -
-    <a href="/foo/bar/show-cookies.html">/foo/bar</a>
-    <a href="/foobar/show-cookies.html">/foobar</a>
-</div>
 <% if (cookieHeader != null) { %>
-<p>Here is the cookie header the server received when loading this page:</p>
-<pre>Cookie: <%= cookieHeader %></pre>
 <table>
     <thead>
     <tr>
@@ -91,11 +86,22 @@
     <% }) %>
     </tbody>
 </table>
+<p>Here is the cookie header the server received when loading this page:</p>
+<pre>Cookie: <%= cookieHeader %></pre>
 <% } else { %>
 <p>The server did not receive any cookie header.</p>
 <% } %>
+<div class="path-nav">
+    Change path:
+    <a href="/show-cookies.html">/</a> -
+    <a href="/foo/show-cookies.html">/foo</a> -
+    <a href="/bar/show-cookies.html">/bar</a> -
+    <a href="/foo/bar/show-cookies.html">/foo/bar</a>
+    <a href="/foobar/show-cookies.html">/foobar</a>
+</div>
 <footer>
     A project by <a href="https://twitter.com/hsablonniere" target="_blank">@hsablonniere</a>.
+    Hosted on <a href="http://www.clever-cloud.com/">Clever Cloud</a>.
     Sources on <a href="https://github.com/hsablonniere/cookies.rocks" target="_blank">Github</a>.
 </footer>
 <div class="host-banner" data-host="<%= host %>"></div>

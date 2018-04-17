@@ -12,7 +12,7 @@
             line-height: 1.6;
             margin: auto auto 75px auto;
             max-width: 40em;
-            padding: 1em;
+            padding: 0 0 0 2em;
         }
 
         footer {
@@ -23,10 +23,10 @@
         .host-banner {
             background-color: #777;
             bottom: 0;
-            height: 50px;
             left: 0;
             position: fixed;
-            width: 100%;
+            top: 0;
+            width: 2em;
         }
 
         .host-banner[data-host="blue"] {
@@ -40,26 +40,28 @@
 </head>
 <body>
 <h1>Cookies Rocks!</h1>
-<div class="select">
-    <span class="root"><a href="//cookies.rocks">cookies.rocks</a></span> -
-    <span class="blue"><a href="//blue.cookies.rocks">blue.cookies.rocks</a></span> -
-    <span class="green"><a href="//green.cookies.rocks">green.cookies.rocks</a></span>
-</div>
 <ul>
+    <li><a href="/show-cookies.html">Show cookies</a></li>
     <li><a href="/simple-session.html">Simple session cookie example</a></li>
     <li><a href="/simple-persistent.html">Simple persistent cookie example</a></li>
-    <li><a href="/show-cookies.html">Show cookies</a></li>
     <li><a href="/delete-simple-cookies.html">Delete simple cookies</a></li>
     <li><a href="/domain-attribute.html">Cookies with Domain attribute</a></li>
     <li><a href="/path-attribute.html">Cookies with Path attribute</a></li>
     <li><a href="/secure-attribute.html">Cookies with Secure attribute</a></li>
     <li><a href="/httponly-attribute.html">Cookies with HttpOnly attribute</a></li>
+    <li><a href="/profile.html">Profile</a></li>
     <li><a href="/tracking-image.html">Tracking image example</a></li>
     <li><a href="/tracking-image-etag.html">Tracking image example (with etag)</a></li>
-    <li><a href="/profile.html">Profile</a></li>
 </ul>
+<div class="select">
+    <span class="root"><a href="//cookies.rocks">cookies.rocks</a></span> -
+    <span class="blue"><a href="//blue.cookies.rocks">blue.cookies.rocks</a></span> -
+    <span class="big.blue"><a href="//big.blue.cookies.rocks">big.blue.cookies.rocks</a></span> -
+    <span class="green"><a href="//green.cookies.rocks">green.cookies.rocks</a></span>
+</div>
 <footer>
     A project by <a href="https://twitter.com/hsablonniere" target="_blank">@hsablonniere</a>.
+    Hosted on <a href="http://www.clever-cloud.com/">Clever Cloud</a>.
     Sources on <a href="https://github.com/hsablonniere/cookies.rocks" target="_blank">Github</a>.
 </footer>
 <div class="host-banner" data-host="<%= host %>"></div>
