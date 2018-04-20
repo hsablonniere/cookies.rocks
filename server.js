@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const generateUuid = require('uuid/v4');
+const url = require('url');
 
 const app = express();
 
@@ -119,11 +120,18 @@ app.use((req, res, next) => {
     console.log(cache);
   }
 
-  if (req.url.endsWith('/tracking-image-etag.html')) {
+  if (req.path.startsWith('/tracking-image-etag.html')) {
     let sites = [];
-    const uuid = req.cookies['etag-uuid'];
-    if (uuid != null && etagCache[uuid] != null) {
-      sites = etagCache[uuid].sites;
+    let uuid = req.query.uuid;
+    if (uuid == null) {
+      uuid = generateUuid();
+      res.redirect(302, `/tracking-image-etag.html?uuid=${uuid}`);
+      return;
+    }
+    const cacheResult = Object.entries(etagCache)
+      .find(([cacheUuid, { refererUuid }]) => refererUuid === uuid);
+    if (uuid != null && cacheResult != null) {
+      sites = cacheResult[1].sites;
     }
     res.render('tracking-image-etag.ejs', { host, sites });
   }
@@ -139,8 +147,9 @@ app.use((req, res, next) => {
 
     const { referer, 'user-agent': userAgent } = req.headers;
     if (referer != null) {
-      if (referer.endsWith('/tracking-image-etag.html')) {
-        res.set('Set-Cookie', `etag-uuid=${uuid}`);
+      if (referer.includes('/tracking-image-etag.html')) {
+        const refererUuid = new url.URL(referer).searchParams.get('uuid');
+        etagCache[uuid].refererUuid = refererUuid;
       } else {
         etagCache[uuid].sites.push({ date: new Date().getTime(), referer, userAgent });
       }
