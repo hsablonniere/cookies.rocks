@@ -89,7 +89,7 @@
     <tbody>
     <% sites.forEach(({ date, referer }) => { %>
     <tr>
-        <td><%= date %></td>
+        <td><%= new Date(date).toISOString().slice(0,-5).replace('T', ' ') %></td>
         <td><%= referer || 'Unknown' %></td>
     </tr>
     <% }) %>
