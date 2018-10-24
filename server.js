@@ -2,9 +2,18 @@
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const crypto = require('crypto');
 const express = require('express');
-const generateUuid = require('uuid/v4');
 const url = require('url');
+
+function randomToken (byteLength = 20) {
+  return crypto
+    .randomBytes(byteLength)
+    .toString('base64')
+    .replace(/\//g, '-')
+    .replace(/\+/g, '_')
+    .replace(/=/g, '')
+}
 
 const app = express();
 
@@ -96,25 +105,25 @@ app.use((req, res, next) => {
 
   if (req.url.endsWith('/tracking-image.html')) {
     let sites = [];
-    const uuid = req.cookies['uuid'];
-    if (uuid != null && cache[uuid] != null) {
-      sites = cache[uuid].sites;
+    const id = req.cookies['id'];
+    if (id != null && cache[id] != null) {
+      sites = cache[id].sites;
     }
     res.render('tracking-image.ejs', { host, sites });
   }
 
   if (req.url === '/cookie.svg') {
 
-    let uuid = req.cookies['uuid'];
-    if (uuid == null || cache[uuid] == null) {
-      uuid = generateUuid();
-      cache[uuid] = { sites: [] };
-      res.set('Set-Cookie', `uuid=${uuid}`);
+    let id = req.cookies['id'];
+    if (id == null || cache[id] == null) {
+      id = randomToken();
+      cache[id] = { sites: [] };
+      res.set('Set-Cookie', `id=${id}`);
     }
 
     const { referer, 'user-agent': userAgent } = req.headers;
     if (referer != null && !referer.endsWith('/tracking-image.html')) {
-      cache[uuid].sites.push({ date: new Date().getTime(), referer, userAgent });
+      cache[id].sites.push({ date: new Date().getTime(), referer, userAgent });
     }
 
     console.log(cache);
@@ -122,15 +131,15 @@ app.use((req, res, next) => {
 
   if (req.path.startsWith('/tracking-image-etag.html')) {
     let sites = [];
-    let uuid = req.query.uuid;
-    if (uuid == null) {
-      uuid = generateUuid();
-      res.redirect(302, `/tracking-image-etag.html?uuid=${uuid}`);
+    let id = req.query.id;
+    if (id == null) {
+      id = randomToken();
+      res.redirect(302, `/tracking-image-etag.html?id=${id}`);
       return;
     }
     const cacheResult = Object.entries(etagCache)
-      .find(([cacheUuid, { refererUuid }]) => refererUuid === uuid);
-    if (uuid != null && cacheResult != null) {
+      .find(([cacheId, { refererId }]) => refererId === id);
+    if (id != null && cacheResult != null) {
       sites = cacheResult[1].sites;
     }
     res.render('tracking-image-etag.ejs', { host, sites });
@@ -138,20 +147,20 @@ app.use((req, res, next) => {
 
   if (req.url === '/cookie-etag.svg') {
 
-    let uuid = req.headers['if-none-match'];
-    if (uuid == null || etagCache[uuid] == null) {
-      uuid = generateUuid();
-      etagCache[uuid] = { sites: [] };
+    let id = req.headers['if-none-match'];
+    if (id == null || etagCache[id] == null) {
+      id = randomToken();
+      etagCache[id] = { sites: [] };
     }
-    res.set('ETag', uuid);
+    res.set('ETag', id);
 
     const { referer, 'user-agent': userAgent } = req.headers;
     if (referer != null) {
       if (referer.includes('/tracking-image-etag.html')) {
-        const refererUuid = new url.URL(referer).searchParams.get('uuid');
-        etagCache[uuid].refererUuid = refererUuid;
+        const refererId = new url.URL(referer).searchParams.get('id');
+        etagCache[id].refererId = refererId;
       } else {
-        etagCache[uuid].sites.push({ date: new Date().getTime(), referer, userAgent });
+        etagCache[id].sites.push({ date: new Date().getTime(), referer, userAgent });
       }
     }
 
@@ -159,24 +168,24 @@ app.use((req, res, next) => {
   }
 
   if (req.url === '/profile.html') {
-    let uuid = req.cookies['uuid'];
-    if (uuid == null || cache[uuid] == null) {
-      uuid = generateUuid();
-      cache[uuid] = { sites: [] };
-      res.set('Set-Cookie', `uuid=${uuid}`);
+    let id = req.cookies['id'];
+    if (id == null || cache[id] == null) {
+      id = randomToken();
+      cache[id] = { sites: [] };
+      res.set('Set-Cookie', `id=${id}`);
     }
-    const profile = cache[uuid].profile;
+    const profile = cache[id].profile;
     res.render('profile.ejs', { host, profile });
   }
 
   if (req.path === '/update-profile.html') {
-    let uuid = req.cookies['uuid'];
-    if (uuid == null || cache[uuid] == null) {
-      uuid = generateUuid();
-      cache[uuid] = { sites: [] };
-      res.set('Set-Cookie', `uuid=${uuid}`);
+    let id = req.cookies['id'];
+    if (id == null || cache[id] == null) {
+      id = randomToken();
+      cache[id] = { sites: [] };
+      res.set('Set-Cookie', `id=${id}`);
     }
-    cache[uuid].profile = {
+    cache[id].profile = {
       firstname: req.query.firstname || req.body.firstname,
       lastname: req.query.lastname || req.body.lastname,
     };
