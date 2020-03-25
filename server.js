@@ -200,6 +200,10 @@ app.use((req, res, next) => {
       `token-none=${token}; Max-Age=5356800; Domain=.cookies.rocks; Secure; Path=/; HttpOnly; SameSite=None`,
       `token-lax=${token}; Max-Age=5356800; Domain=.cookies.rocks; Secure; Path=/; HttpOnly; SameSite=Lax`,
       `token-strict=${token}; Max-Age=5356800; Domain=.cookies.rocks; Secure; Path=/; HttpOnly; SameSite=Strict`,
+      `token-nodomain-default=${token}; Max-Age=5356800; Secure; Path=/; HttpOnly`,
+      `token-nodomain-none=${token}; Max-Age=5356800; Secure; Path=/; HttpOnly; SameSite=None`,
+      `token-nodomain-lax=${token}; Max-Age=5356800; Secure; Path=/; HttpOnly; SameSite=Lax`,
+      `token-nodomain-strict=${token}; Max-Age=5356800; Secure; Path=/; HttpOnly; SameSite=Strict`,
     ]);
     res.redirect(302, '/');
   }
