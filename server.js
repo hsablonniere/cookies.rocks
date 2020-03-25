@@ -12,7 +12,7 @@ function randomToken (byteLength = 20) {
     .toString('base64')
     .replace(/\//g, '-')
     .replace(/\+/g, '_')
-    .replace(/=/g, '')
+    .replace(/=/g, '');
 }
 
 const app = express();
@@ -159,7 +159,8 @@ app.use((req, res, next) => {
       if (referer.includes('/tracking-image-etag.html')) {
         const refererId = new url.URL(referer).searchParams.get('id');
         etagCache[id].refererId = refererId;
-      } else {
+      }
+      else {
         etagCache[id].sites.push({ date: new Date().getTime(), referer, userAgent });
       }
     }
@@ -190,6 +191,17 @@ app.use((req, res, next) => {
       lastname: req.query.lastname || req.body.lastname,
     };
     res.redirect(302, './profile.html');
+  }
+
+  if (req.path === '/test-post-samesite.html') {
+    const { token } = req.body;
+    res.set('Set-Cookie', [
+      `token-default=${token}; Max-Age=5356800; Domain=.cookies.rocks; Secure; Path=/; HttpOnly`,
+      `token-none=${token}; Max-Age=5356800; Domain=.cookies.rocks; Secure; Path=/; HttpOnly; SameSite=None`,
+      `token-lax=${token}; Max-Age=5356800; Domain=.cookies.rocks; Secure; Path=/; HttpOnly; SameSite=Lax`,
+      `token-strict=${token}; Max-Age=5356800; Domain=.cookies.rocks; Secure; Path=/; HttpOnly; SameSite=Strict`,
+    ]);
+    res.redirect(302, '/');
   }
 
   next();
